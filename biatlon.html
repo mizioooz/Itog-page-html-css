@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Биатлонный Клуб</title>
+    <link rel="icon" href="img/biatlon.png" type="images/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a4e 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(145deg, #3a7bd5, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 150px);
+        }
+
+        .biathlon-range {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .range-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 70vh;
+            position: relative;
+            background: #e0f7fa;
+            border: 4px solid white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .snow-field {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to bottom, #e0f7fa, #b2ebf2);
+            z-index: 1;
+        }
+
+        .snow-drift {
+            position: absolute;
+            background: white;
+            z-index: 2;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        }
+
+        .snow-drift-1 {
+            width: 100%;
+            height: 30px;
+            bottom: 0;
+            left: 0;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .snow-drift-2 {
+            width: 150px;
+            height: 50px;
+            bottom: 10px;
+            left: 10%;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .snow-drift-3 {
+            width: 200px;
+            height: 60px;
+            bottom: 15px;
+            right: 15%;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .snow-after-line {
+            position: absolute;
+            bottom: 25%;
+            left: 0;
+            width: 100%;
+            height: 5%;
+            background: white;
+            z-index: 3;
+        }
+
+        .shooting-line {
+            position: absolute;
+            bottom: 25%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #333;
+            z-index: 4;
+        }
+
+        .targets {
+            position: absolute;
+            bottom: 27%;
+            right: 5%;
+            display: flex;
+            gap: 40px;
+            z-index: 5;
+        }
+
+        .target {
+            width: 60px;
+            height: 60px;
+            background: #000;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transform-origin: center bottom;
+            z-index: 5;
+        }
+
+        .biathlete {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            bottom: 20%;
+            left: -100px;
+            z-index: 6;
+        }
+
+        .biathlete-body {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(145deg, #3a7bd5, #006aff);
+            bottom: 0;
+            left: 15px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .biathlete-head {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffdbac;
+            border-radius: 50%;
+            bottom: 60px;
+            left: 20px;
+        }
+
+        .ski {
+            position: absolute;
+            width: 50px;
+            height: 4px;
+            background: #333;
+            bottom: -5px;
+        }
+
+        .ski-left {
+            left: 5px;
+            transform: rotate(5deg);
+        }
+
+        .ski-right {
+            left: 25px;
+            transform: rotate(-5deg);
+        }
+
+        .ski-pole {
+            position: absolute;
+            width: 3px;
+            height: 40px;
+            background: #555;
+            bottom: 0;
+            transform-origin: bottom center;
+        }
+
+        .ski-pole-left {
+            left: 20px;
+        }
+
+        .ski-pole-right {
+            left: 27px;
+        }
+
+        .rifle {
+            position: absolute;
+            width: 50px;
+            height: 8px;
+            background: #333;
+            bottom: 30px;
+            left: 30px;
+            transform-origin: left center;
+            transform: rotate(-20deg);
+        }
+
+        .ski-tracks {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            bottom: 20%;
+            left: 0;
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 49px,
+                rgba(0, 0, 0, 0.1) 50px,
+                rgba(0, 0, 0, 0.1) 99px,
+                transparent 100px
+            );
+            z-index: 2;
+        }
+
+        .bullet {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #000;
+            border-radius: 50%;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .snow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: falling linear infinite;
+        }
+
+        .features {
+            padding: 80px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, #3a7bd5, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #3a7bd5;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .range-container {
+                height: 60vh;
+            }
+
+            .target {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .snow-drift-2,
+            .snow-drift-3 {
+                width: 100px;
+                height: 30px;
+            }
+        }
+
+        @keyframes skiMove {
+            0%   { left: -100px; }
+            100% { left: 30%; }
+        }
+
+        @keyframes skiPoleLeft {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        @keyframes skiPoleRight {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(-5deg); }
+        }
+
+        @keyframes stopPoles {
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes prepareToShoot {
+            0%   { transform: translateY(20px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes rifleRecoil1 {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes rifleRecoil2 {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes rifleRecoil3 {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes shootBullet1 {
+            0%   { opacity: 0; left: 30%; bottom: 27%; }
+            10%  { opacity: 1; left: 30%; bottom: 27%; }
+            30%  { left: 40%; bottom: 27%; }
+            50%  { left: 50%; bottom: 27%; }
+            70%  { left: 60%; bottom: 27%; }
+            90%  { left: 70%; bottom: 27%; opacity: 1; }
+            100% { left: 80%; bottom: 27%; opacity: 0; }
+        }
+
+        @keyframes shootBullet2 {
+            0%   { opacity: 0; left: 30%; bottom: 27%; }
+            10%  { opacity: 1; left: 30%; bottom: 27%; }
+            30%  { left: 40%; bottom: 27%; }
+            50%  { left: 50%; bottom: 27%; }
+            70%  { left: 60%; bottom: 27%; }
+            90%  { left: 70%; bottom: 27%; opacity: 1; }
+            100% { left: 80%; bottom: 27%; opacity: 0; }
+        }
+
+        @keyframes shootBullet3 {
+            0%   { opacity: 0; left: 30%; bottom: 27%; }
+            10%  { opacity: 1; left: 30%; bottom: 27%; }
+            30%  { left: 40%; bottom: 27%; }
+            50%  { left: 50%; bottom: 27%; }
+            70%  { left: 60%; bottom: 27%; }
+            90%  { left: 70%; bottom: 27%; opacity: 1; }
+            100% { left: 80%; bottom: 27%; opacity: 0; }
+        }
+
+        @keyframes fallTarget {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(90deg); }
+        }
+
+        @keyframes falling {
+            0% { transform: translateY(-10px) translateX(0); }
+            100% { transform: translateY(100vh) translateX(20px); }
+        }
+
+        .biathlete {
+            animation: skiMove 3s ease-in-out forwards;
+        }
+
+        .ski-pole-left {
+            animation: 
+                skiPoleLeft 0.5s ease-in-out infinite,
+                stopPoles 0.1s ease-in-out forwards;
+            animation-delay: 0s, 3s;
+        }
+
+        .ski-pole-right {
+            animation: 
+                skiPoleRight 0.5s ease-in-out infinite,
+                stopPoles 0.1s ease-in-out forwards;
+            animation-delay: 0.25s, 3s;
+        }
+
+        .biathlete.prepare-to-shoot {
+            animation: 
+                skiMove 3s ease-in-out forwards,
+                prepareToShoot 0.5s ease-in-out forwards;
+            animation-delay: 0s, 3s;
+        }
+
+        .rifle {
+            animation: raiseRifle 0.5s ease-in-out forwards;
+            animation-delay: 3.5s;
+        }
+
+        @keyframes raiseRifle {
+            from { transform: rotate(-20deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        .rifle.shot-1 {
+            animation: 
+                raiseRifle 0.5s ease-in-out forwards,
+                rifleRecoil1 0.3s ease-in-out forwards;
+            animation-delay: 3.5s, 4s;
+        }
+
+        .rifle.shot-2 {
+            animation: 
+                raiseRifle 0.5s ease-in-out forwards,
+                rifleRecoil1 0.3s ease-in-out forwards,
+                rifleRecoil2 0.3s ease-in-out forwards;
+            animation-delay: 3.5s, 4s, 4.5s;
+        }
+
+        .rifle.shot-3 {
+            animation: 
+                raiseRifle 0.5s ease-in-out forwards,
+                rifleRecoil1 0.3s ease-in-out forwards,
+                rifleRecoil2 0.3s ease-in-out forwards,
+                rifleRecoil3 0.3s ease-in-out forwards;
+            animation-delay: 3.5s, 4s, 4.5s, 5s;
+        }
+
+        .bullet.shot-1 {
+            animation: shootBullet1 0.5s linear forwards;
+            animation-delay: 4s;
+        }
+
+        .bullet.shot-2 {
+            animation: shootBullet2 0.5s linear forwards;
+            animation-delay: 4.5s;
+        }
+
+        .bullet.shot-3 {
+            animation: shootBullet3 0.5s linear forwards;
+            animation-delay: 5s;
+        }
+
+        .target.hit-1 {
+            animation: fallTarget 0.5s ease-in-out forwards;
+            animation-delay: 4.5s;
+        }
+
+        .target.hit-2 {
+            animation: fallTarget 0.5s ease-in-out forwards;
+            animation-delay: 5s;
+        }
+
+        .target.hit-3 {
+            animation: fallTarget 0.5s ease-in-out forwards;
+            animation-delay: 5.5s;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Биатлонный Клуб</div>
+        <nav>
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Тренировки</a></li>
+                <li><a href="#">Соревнования</a></li>
+                <li><a href="#">Инвентарь</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="biathlon-range">
+            <div class="range-container">
+                <div class="snow-field"></div>
+                <div class="snow-drift snow-drift-1"></div>
+                <div class="snow-drift snow-drift-2"></div>
+                <div class="snow-drift snow-drift-3"></div>
+                <div class="snow-after-line"></div>
+                
+                <div class="ski-tracks"></div>
+                <div class="shooting-line"></div>
+                
+                <div class="targets">
+                    <div class="target hit-1" id="target1"></div>
+                    <div class="target hit-2" id="target2"></div>
+                    <div class="target hit-3" id="target3"></div>
+                </div>
+                
+                <div class="biathlete prepare-to-shoot">
+                    <div class="biathlete-head"></div>
+                    <div class="biathlete-body"></div>
+                    <div class="ski ski-left"></div>
+                    <div class="ski ski-right"></div>
+                    <div class="ski-pole ski-pole-left"></div>
+                    <div class="ski-pole ski-pole-right"></div>
+                    <div class="rifle shot-3"></div>
+                </div>
+                
+                <div class="bullet shot-1"></div>
+                <div class="bullet shot-2"></div>
+                <div class="bullet shot-3"></div>
+                
+                <div class="snow" id="snow">
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                    <div class="snowflake"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="features">
+            <div class="feature-card">
+                <i class="fas fa-bullseye"></i>
+                <h3>Стрельбище</h3>
+                <p>Современный тир с электронными мишенями и системой анализа результатов</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-skiing"></i>
+                <h3>Лыжные трассы</h3>
+                <p>Профессионально подготовленные трассы различной сложности и протяженности</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-medal"></i>
+                <h3>Тренеры</h3>
+                <p>Опытные тренеры с профессиональным образованием и спортивными достижениями</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="logo">Биатлонный Клуб</div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-vk"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>© 2025-2026 Биатлонный Клуб<br>Все права защищены</p>
+    </footer>
+
+    <button class="back-button" onclick="window.location.href='main_page.html'">Назад</button>
+</body>
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ледовая Арена</title>
+    <link rel="icon" href="img/hockey.png" type="images/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(145deg, #3a7bd5, #006aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 150px);
+        }
+
+        .hockey-rink {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .rink-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 70vh;
+            position: relative;
+        }
+
+        .rink-surface {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #e0f7fa, #b2ebf2);
+            border: 4px solid white;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: red;
+            transform: translateX(-50%);
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            border: 4px solid red;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .faceoff-circle {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 4px solid red;
+            border-radius: 50%;
+        }
+
+        .faceoff-left { top: 30%; left: 25%; }
+        .faceoff-right { top: 30%; right: 25%; }
+        .faceoff-bottom-left { bottom: 30%; left: 25%; }
+        .faceoff-bottom-right { bottom: 30%; right: 25%; }
+
+        .goal-left,
+        .goal-right {
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 80px;
+            background: linear-gradient(145deg, #3a7bd5, #006aff);
+            border: 2px solid white;
+            transform: translateY(-50%);
+        }
+
+        .goal-left { left: 0; }
+        .goal-right { right: 0; }
+
+        .player {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            z-index: 3;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .player.blue {
+            background: linear-gradient(145deg, #3a7bd5, #006aff);
+        }
+
+        .player.red {
+            background: linear-gradient(145deg, #ff416c, #ff4b2b);
+        }
+
+        .puck {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #111;
+            border-radius: 50%;
+            z-index: 4;
+            top: 50%;
+            left: 49%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .features {
+            padding: 80px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, #3a7bd5, #006aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #3a7bd5;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .rink-container {
+                height: 60vh;
+            }
+
+            .faceoff-circle {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @keyframes playerCombo {
+            0%   { left: 32%; top: 50%; }
+            20%  { left: 40%; top: 45%; }
+            40%  { left: 50%; top: 40%; }
+            60%  { left: 58%; top: 50%; }
+            75%  { left: 65%; top: 40%; }
+            100% { left: 85%; top: 30%; }
+        }
+
+        @keyframes puckGoalShot {
+            0%   { left: 35%; top: 54%; }
+            20%  { left: 43%; top: 47%; }
+            40%  { left: 53%; top: 42%; }
+            60%  { left: 61%; top: 52%; }
+            75%  { left: 68%; top: 43%; }
+            100% { left: 99.2%; top: 48%; }
+        }
+
+        @keyframes goalFlash {
+            0%, 100% { background: linear-gradient(145deg, #3a7bd5, #006aff); }
+            50% { background: red; }
+        }
+
+        @keyframes goalText {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        }
+
+        .player.combo-play {
+            animation: playerCombo 5s ease-in-out forwards;
+        }
+
+        .puck.combo-play {
+            animation: puckGoalShot 5s ease-in-out forwards;
+        }
+
+        .goal-right.goal-scored {
+            animation: goalFlash 0.4s ease-in-out 12;
+            animation-delay: 5s;
+            animation-fill-mode: forwards;
+        }
+
+        .goal-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: bold;
+            color: yellow;
+            text-shadow: 0 0 20px red, 0 0 30px white;
+            opacity: 0;
+            animation: goalText 2s ease-in-out forwards;
+            animation-delay: 5s;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        @keyframes moveLW {
+            0%   { left: 30%; top: 30%; }
+            25%  { left: 32%; top: 28%; }
+            50%  { left: 34%; top: 30%; }
+            75%  { left: 32%; top: 32%; }
+            100% { left: 30%; top: 30%; }
+        }
+
+        @keyframes moveRW {
+            0%   { left: 30%; top: 70%; }
+            25%  { left: 32%; top: 72%; }
+            50%  { left: 34%; top: 70%; }
+            75%  { left: 32%; top: 68%; }
+            100% { left: 30%; top: 70%; }
+        }
+
+        @keyframes moveD1 {
+            0%   { left: 15%; top: 40%; }
+            25%  { left: 16%; top: 39%; }
+            50%  { left: 17%; top: 40%; }
+            75%  { left: 16%; top: 41%; }
+            100% { left: 15%; top: 40%; }
+        }
+
+        @keyframes moveD2 {
+            0%   { left: 15%; top: 60%; }
+            25%  { left: 16%; top: 61%; }
+            50%  { left: 17%; top: 60%; }
+            75%  { left: 16%; top: 59%; }
+            100% { left: 15%; top: 60%; }
+        }
+
+        .player.lw-move {
+            animation: moveLW 5s ease-in-out infinite;
+        }
+
+        .player.rw-move {
+            animation: moveRW 5s ease-in-out infinite;
+        }
+
+        .player.d1-move {
+            animation: moveD1 5s ease-in-out infinite;
+        }
+
+        .player.d2-move {
+            animation: moveD2 5s ease-in-out infinite;
+        }
+
+        @keyframes attackLW {
+            0%   { left: 30%; top: 30%; }
+            20%  { left: 38%; top: 25%; }
+            40%  { left: 48%; top: 28%; }
+            60%  { left: 58%; top: 25%; }
+            80%  { left: 70%; top: 18%; }
+            100% { left: 85%; top: 10%; }
+        }
+
+        @keyframes attackRW {
+            0%   { left: 30%; top: 70%; }
+            20%  { left: 38%; top: 72%; }
+            40%  { left: 48%; top: 68%; }
+            60%  { left: 58%; top: 65%; }
+            80%  { left: 70%; top: 68%; }
+            100% { left: 85%; top: 72%; }
+        }
+
+        .player.attack-lw {
+            animation: attackLW 5s ease-in-out forwards;
+        }
+
+        .player.attack-rw {
+            animation: attackRW 5s ease-in-out forwards;
+        }
+
+        @keyframes redDefense1 {
+            0%   { right: 15%; top: 40%; }
+            25%  { right: 16%; top: 42%; }
+            50%  { right: 17%; top: 40%; }
+            75%  { right: 16%; top: 38%; }
+            100% { right: 15%; top: 40%; }
+        }
+
+        @keyframes redDefense2 {
+            0%   { right: 15%; top: 60%; }
+            25%  { right: 16%; top: 58%; }
+            50%  { right: 17%; top: 60%; }
+            75%  { right: 16%; top: 62%; }
+            100% { right: 15%; top: 60%; }
+        }
+
+        @keyframes redRW {
+            0%   { right: 30%; top: 30%; }
+            25%  { right: 32%; top: 32%; }
+            50%  { right: 34%; top: 30%; }
+            75%  { right: 32%; top: 28%; }
+            100% { right: 30%; top: 30%; }
+        }
+
+        @keyframes redCenter {
+            0%   { right: 32%; top: 50%; }
+            25%  { right: 34%; top: 52%; }
+            50%  { right: 36%; top: 50%; }
+            75%  { right: 34%; top: 48%; }
+            100% { right: 32%; top: 50%; }
+        }
+
+        @keyframes redLW {
+            0%   { right: 30%; top: 70%; }
+            25%  { right: 32%; top: 68%; }
+            50%  { right: 34%; top: 70%; }
+            75%  { right: 32%; top: 72%; }
+            100% { right: 30%; top: 70%; }
+        }
+
+        @keyframes redGoalie {
+            0%   { right: 3%; top: 50%; }
+            25%  { right: 4%; top: 52%; }
+            50%  { right: 5%; top: 50%; }
+            75%  { right: 4%; top: 48%; }
+            100% { right: 3%; top: 50%; }
+        }
+
+        .player.red-d1 {
+            animation: redDefense1 5s ease-in-out infinite;
+        }
+
+        .player.red-d2 {
+            animation: redDefense2 5s ease-in-out infinite;
+        }
+
+        .player.red-rw {
+            animation: redRW 5s ease-in-out infinite;
+        }
+
+        .player.red-c {
+            animation: redCenter 5s ease-in-out infinite;
+        }
+
+        .player.red-lw {
+            animation: redLW 5s ease-in-out infinite;
+        }
+
+        .player.red-g {
+            animation: redGoalie 5s ease-in-out infinite;
+        }
+
+        @keyframes redDefenseReact1 {
+            0%   { right: 15%; top: 40%; }
+            20%  { right: 25%; top: 38%; }
+            40%  { right: 35%; top: 36%; }
+            60%  { right: 45%; top: 38%; }
+            80%  { right: 55%; top: 36%; }
+            100% { right: 65%; top: 34%; }
+        }
+
+        @keyframes redDefenseReact2 {
+            0%   { right: 15%; top: 60%; }
+            20%  { right: 25%; top: 62%; }
+            40%  { right: 35%; top: 64%; }
+            60%  { right: 45%; top: 62%; }
+            80%  { right: 55%; top: 64%; }
+            100% { right: 65%; top: 66%; }
+        }
+
+        .player.red-d1.react {
+            animation: redDefenseReact1 5s ease-in-out forwards;
+        }
+
+        .player.red-d2.react {
+            animation: redDefenseReact2 5s ease-in-out forwards;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Ледовая Арена</div>
+        <nav>
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Расписание</a></li>
+                <li><a href="#">Услуги</a></li>
+                <li><a href="#">Турниры</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="hockey-rink">
+            <div class="rink-container">
+                <div class="rink-surface">
+                    <div class="center-line"></div>
+                    <div class="center-circle"></div>
+                    <div class="faceoff-circle faceoff-left"></div>
+                    <div class="faceoff-circle faceoff-right"></div>
+                    <div class="faceoff-circle faceoff-bottom-left"></div>
+                    <div class="faceoff-circle faceoff-bottom-right"></div>
+                    <div class="goal-left"></div>
+                    <div class="goal-right goal-scored"></div>
+
+                    <div class="goal-text">ГОЛ!</div>
+
+                    <div class="player blue" style="left: 3%; top: 50%;">G</div>
+                    <div class="player blue d1-move" style="left: 15%; top: 40%;">D1</div>
+                    <div class="player blue d2-move" style="left: 15%; top: 60%;">D2</div>
+                    <div class="player blue attack-lw" style="left: 30%; top: 30%;">LW</div>
+                    <div class="player blue attack-rw" style="left: 30%; top: 70%;">RW</div>
+                    <div class="player blue combo-play" style="left: 32%; top: 50%;">C</div>
+                    <div class="puck combo-play" style="left: 35%; top: 54%;"></div>
+
+                    <div class="player red red-g" style="right: 3%; top: 50%;">G</div>
+                    <div class="player red red-d1 react" style="right: 15%; top: 40%;">D1</div>
+                    <div class="player red red-d2 react" style="right: 15%; top: 60%;">D2</div>
+                    <div class="player red red-rw" style="right: 30%; top: 30%;">RW</div>
+                    <div class="player red red-c" style="right: 32%; top: 50%;">C</div>
+                    <div class="player red red-lw" style="right: 30%; top: 70%;">LW</div>
+                </div>
+            </div>
+        </div>
+
+        <section class="features">
+            <div class="feature-card">
+                <i class="fas fa-hockey-puck"></i>
+                <h3>Профессиональный лед</h3>
+                <p>Качественная ледовая поверхность, поддерживаемая современными холодильными установками</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-trophy"></i>
+                <h3>Турниры и лиги</h3>
+                <p>Организация и проведение турниров различного уровня от любительских до профессиональных</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-friends"></i>
+                <h3>Тренировки</h3>
+                <p>Индивидуальные и групповые тренировки с профессиональными тренерами</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="logo">Ледовая Арена</div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-vk"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>© 2025-2026 Хоккейная Арена<br>Все права защищены</p>
+    </footer>
+
+    <button class="back-button" onclick="window.location.href='main_page.html'">Назад</button>
+</body>
+</html>
